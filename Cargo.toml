@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "fuzzer",
+    "babyheap",
+    "babynotes",
+]
