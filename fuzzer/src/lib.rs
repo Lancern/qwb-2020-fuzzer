@@ -17,7 +17,6 @@ pub struct CommandSpec {
 
 #[derive(Clone, Debug)]
 pub enum CommandDataSpec {
-    None,
     SInt { min: i64, max: i64 },
     UInt { min: u64, max: u64 },
     Binary { min_len: usize, max_len: usize },
@@ -39,7 +38,6 @@ impl CommandDataSpec {
         R: ?Sized + Rng,
     {
         match self {
-            CommandDataSpec::None => CommandData::None,
             CommandDataSpec::SInt { min, max } => {
                 let dist = Uniform::new_inclusive(*min, *max);
                 CommandData::SInt(rng.sample(dist))
@@ -123,7 +121,6 @@ pub struct Command {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub enum CommandData {
-    None,
     SInt(i64),
     UInt(u64),
     Binary(Vec<u8>),
@@ -139,7 +136,6 @@ impl Command {
 
         let data_idx = rng.sample(Uniform::new(0, self.data.len()));
         match (&mut self.data[data_idx], &spec.data[data_idx]) {
-            (CommandData::None, CommandDataSpec::None) => (),
             (CommandData::SInt(value), CommandDataSpec::SInt { min, max }) => {
                 mutate_signed_int(value, *min, *max, rng);
             }
@@ -245,6 +241,10 @@ pub struct Fuzzer {
 }
 
 impl Fuzzer {
+    pub fn afl(&self) -> *const c_void {
+        self.afl
+    }
+
     pub fn spec(&self) -> &[CommandSpec] {
         &self.spec
     }
@@ -282,7 +282,6 @@ impl FuzzerBuilder {
                 CommandDataSpec::Binary { min_len, max_len } => {
                     debug_assert!(*min_len <= *max_len);
                 }
-                _ => (),
             };
         }
 
