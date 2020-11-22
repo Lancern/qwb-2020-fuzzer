@@ -2,7 +2,6 @@ extern crate rand;
 extern crate rand_pcg;
 extern crate serde;
 
-use std::io::{Read, Write};
 use std::os::raw::c_void;
 
 use rand::distributions::Uniform;
@@ -10,13 +9,13 @@ use rand::{Rng, SeedableRng};
 use rand_pcg::Pcg32;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub struct CommandSpec {
     pub id: i32,
-    pub data: CommandDataSpec,
+    pub data: Vec<CommandDataSpec>,
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub enum CommandDataSpec {
     None,
     SInt { min: i64, max: i64 },
@@ -29,25 +28,34 @@ impl CommandSpec {
     where
         R: ?Sized + Rng,
     {
-        let data = match &self.data {
+        let data = self.data.iter().map(|spec| spec.create(rng)).collect();
+        Command { id: self.id, data }
+    }
+}
+
+impl CommandDataSpec {
+    fn create<R>(&self, rng: &mut R) -> CommandData
+    where
+        R: ?Sized + Rng,
+    {
+        match self {
             CommandDataSpec::None => CommandData::None,
             CommandDataSpec::SInt { min, max } => {
                 let dist = Uniform::new_inclusive(*min, *max);
-                CommandData::SInt(rng.sample(dist));
+                CommandData::SInt(rng.sample(dist))
             }
             CommandDataSpec::UInt { min, max } => {
                 let dist = Uniform::new_inclusive(*min, *max);
-                CommandData::UInt(rng.sample(dist));
+                CommandData::UInt(rng.sample(dist))
             }
             CommandDataSpec::Binary { min_len, max_len } => {
                 let dist = Uniform::new_inclusive(*min_len, *max_len);
                 let len = rng.sample(dist);
                 let mut buf = vec![0u8; len];
-                rng.fill(&mut buf);
+                rng.fill_bytes(&mut buf);
                 CommandData::Binary(buf)
             }
-        };
-        Command { id: self.id, data }
+        }
     }
 }
 
@@ -70,13 +78,16 @@ impl Input {
         }
     }
 
-    fn mutate<R>(&mut self, spec: &[CommandSpec], rng: &mut R) {
+    fn mutate<R>(&mut self, spec: &[CommandSpec], rng: &mut R)
+    where
+        R: ?Sized + Rng,
+    {
         let pat = rng.gen::<f64>();
         if pat <= MUTATE_ADD_CMD_PROB {
             // Add a new command to the input.
-            let spec = rng.select(spec);
-            let cmd = spec.create(&mut self.rng);
-            let idx = rng.sample(Uniform::new_inclusive(0, input.commands.len()));
+            let spec = random_select(rng, spec);
+            let cmd = spec.create(rng);
+            let idx = rng.sample(Uniform::new_inclusive(0, self.commands.len()));
             self.commands.insert(idx, cmd);
             return;
         }
@@ -89,7 +100,7 @@ impl Input {
         }
 
         // Mutate an existing command.
-        let cmd = rng.select_mut(&mut self.commands);
+        let cmd = random_select_mut(rng, &mut self.commands);
         let spec = spec
             .iter()
             .find(|s| s.id == cmd.id)
@@ -107,7 +118,7 @@ impl Default for Input {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Command {
     pub id: i32,
-    pub data: CommandData,
+    pub data: Vec<CommandData>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -124,7 +135,10 @@ impl Command {
         R: ?Sized + Rng,
     {
         assert_eq!(spec.id, self.id);
-        match (&mut self.data, &spec.data) {
+        assert_eq!(self.data.len(), spec.data.len());
+
+        let data_idx = rng.sample(Uniform::new(0, self.data.len()));
+        match (&mut self.data[data_idx], &spec.data[data_idx]) {
             (CommandData::None, CommandDataSpec::None) => (),
             (CommandData::SInt(value), CommandDataSpec::SInt { min, max }) => {
                 mutate_signed_int(value, *min, *max, rng);
@@ -187,7 +201,7 @@ where
             // Extend the buffer.
             let extend_len = rng.sample(Uniform::new_inclusive(0, max_len - buf.len()));
             let mut extend_buf = vec![0u8; extend_len];
-            rng.fill(&mut extend_buf);
+            rng.fill_bytes(&mut extend_buf);
             buf.extend_from_slice(&extend_buf);
             return;
         }
@@ -200,8 +214,8 @@ where
             let max_splice_len = buf.len() - min_len;
             let splice_begin = rng.sample(Uniform::new(0, buf.len()));
             let splice_end = rng.sample(Uniform::new(
-                splice_first,
-                std::cmp::min(splice_first + max_splice_len, buf.len()),
+                splice_begin,
+                std::cmp::min(splice_begin + max_splice_len, buf.len()),
             )) + 1;
             *buf = buf
                 .splice(splice_begin..splice_end, std::iter::empty())
@@ -215,7 +229,7 @@ where
     }
 
     // Perform arithmetic operation on some byte.
-    let target = rng.select_mut(buf);
+    let target = random_select_mut(rng, buf);
     let delta = rng.sample(Uniform::new_inclusive(
         -(MUTATE_INT_DELTA as i8),
         MUTATE_INT_DELTA as i8,
@@ -257,18 +271,20 @@ impl FuzzerBuilder {
 
     pub fn add_spec(mut self, spec: CommandSpec) -> Self {
         // Sanity checks.
-        match &spec.data {
-            CommandDataSpec::SInt { min, max } => {
-                debug_assert!(*min <= *max);
-            }
-            CommandDataSpec::UInt { min, max } => {
-                debug_assert!(*min <= *max);
-            }
-            CommandDataSpec::Binary { min_len, max_len } => {
-                debug_assert!(*min_len <= *max_len);
-            }
-            _ => (),
-        };
+        for data_spec in &spec.data {
+            match data_spec {
+                CommandDataSpec::SInt { min, max } => {
+                    debug_assert!(*min <= *max);
+                }
+                CommandDataSpec::UInt { min, max } => {
+                    debug_assert!(*min <= *max);
+                }
+                CommandDataSpec::Binary { min_len, max_len } => {
+                    debug_assert!(*min_len <= *max_len);
+                }
+                _ => (),
+            };
+        }
 
         self.spec.push(spec);
         self
@@ -283,27 +299,18 @@ impl FuzzerBuilder {
     }
 }
 
-trait RngExt {
-    fn select<'s, 'v, T>(&'s mut self, values: &'v [T]) -> &'v T;
-
-    fn select_mut<'s, 'v, T>(&'s mut self, values: &'v mut [T]) -> &'v mut T;
+fn random_select<'r, 'v, R, T>(rng: &'r mut R, values: &'v [T]) -> &'v T
+where
+    R: ?Sized + Rng,
+{
+    let idx = rng.sample(Uniform::new(0, values.len()));
+    &values[idx]
 }
 
-impl<T> RngExt for T
+fn random_select_mut<'r, 'v, R, T>(rng: &'r mut R, values: &'v mut [T]) -> &'v mut T
 where
-    T: Rng,
+    R: ?Sized + Rng,
 {
-    fn select<'s, 'v, T>(&'s mut self, values: &'v [T]) -> &'v T {
-        assert!(!values.is_empty());
-
-        let idx = self.sample(Uniform::new(0, values.len()));
-        &values[idx]
-    }
-
-    fn select_mut<'s, 'v, T>(&'s mut self, values: &'v mut [T]) -> &'v mut T {
-        assert!(!values.is_empty());
-
-        let idx = self.sample(Uniform::new(0, values.len()));
-        &mut values[idx]
-    }
+    let idx = rng.sample(Uniform::new(0, values.len()));
+    &mut values[idx]
 }
