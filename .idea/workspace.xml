@@ -12,10 +12,12 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5d25cade-c56c-4782-bf7c-ff0a46a49950" name="Default Changelist" comment="Implement core functionalities of the fuzzer">
-      <change afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    <list default="true" id="5d25cade-c56c-4782-bf7c-ff0a46a49950" name="Default Changelist" comment="Fix build issues">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/babynotes/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/babynotes/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/babynotes/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/babynotes/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fuzzer/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/fuzzer/src/lib.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +55,18 @@
     <property name="settings.editor.selected.configurable" value="language.rust.rustfmt" />
   </component>
   <component name="RunManager">
+    <configuration name="Build" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+      <option name="channel" value="DEFAULT" />
+      <option name="command" value="build" />
+      <option name="allFeatures" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="backtrace" value="SHORT" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -71,7 +85,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1605883170217</updated>
-      <workItem from="1605883171507" duration="21617000" />
+      <workItem from="1605883171507" duration="28348000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1605883309155</created>
@@ -87,7 +101,21 @@
       <option name="project" value="LOCAL" />
       <updated>1606030318849</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Add license and readme">
+      <created>1606030669204</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1606030669204</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Fix build issues">
+      <created>1606036107187</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1606036107187</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -96,9 +124,15 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit" />
     <MESSAGE value="Implement core functionalities of the fuzzer" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implement core functionalities of the fuzzer" />
+    <MESSAGE value="Add license and readme" />
+    <MESSAGE value="Fix build issues" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix build issues" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="206" y="135" width="1086" height="712" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1606034644508">
+      <screen x="0" y="0" width="1500" height="960" />
+    </state>
+    <state x="206" y="135" width="1086" height="712" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1500.960@0.0.1500.960" timestamp="1606034644508" />
     <state x="556" y="196" key="#com.intellij.ide.util.MemberChooser" timestamp="1606025136825">
       <screen x="0" y="0" width="1500" height="960" />
     </state>
@@ -107,13 +141,29 @@
       <screen x="0" y="0" width="1500" height="960" />
     </state>
     <state x="531" y="221" key="FileChooserDialogImpl/0.0.1500.960@0.0.1500.960" timestamp="1605883236272" />
+    <state width="1458" height="256" key="GridCell.Tab.0.bottom" timestamp="1606037684289">
+      <screen x="0" y="0" width="1500" height="960" />
+    </state>
+    <state width="1458" height="256" key="GridCell.Tab.0.bottom/0.0.1500.960@0.0.1500.960" timestamp="1606037684289" />
+    <state width="1458" height="256" key="GridCell.Tab.0.center" timestamp="1606037684289">
+      <screen x="0" y="0" width="1500" height="960" />
+    </state>
+    <state width="1458" height="256" key="GridCell.Tab.0.center/0.0.1500.960@0.0.1500.960" timestamp="1606037684289" />
+    <state width="1458" height="256" key="GridCell.Tab.0.left" timestamp="1606037684289">
+      <screen x="0" y="0" width="1500" height="960" />
+    </state>
+    <state width="1458" height="256" key="GridCell.Tab.0.left/0.0.1500.960@0.0.1500.960" timestamp="1606037684289" />
+    <state width="1458" height="256" key="GridCell.Tab.0.right" timestamp="1606037684289">
+      <screen x="0" y="0" width="1500" height="960" />
+    </state>
+    <state width="1458" height="256" key="GridCell.Tab.0.right/0.0.1500.960@0.0.1500.960" timestamp="1606037684289" />
     <state x="336" y="174" key="SettingsEditor" timestamp="1606018814264">
       <screen x="0" y="0" width="1500" height="960" />
     </state>
     <state x="336" y="174" key="SettingsEditor/0.0.1500.960@0.0.1500.960" timestamp="1606018814264" />
-    <state x="413" y="206" width="672" height="678" key="search.everywhere.popup" timestamp="1606021162213">
+    <state x="414" y="207" width="672" height="678" key="search.everywhere.popup" timestamp="1606031119375">
       <screen x="0" y="0" width="1500" height="960" />
     </state>
-    <state x="413" y="206" width="672" height="678" key="search.everywhere.popup/0.0.1500.960@0.0.1500.960" timestamp="1606021162213" />
+    <state x="414" y="207" width="672" height="678" key="search.everywhere.popup/0.0.1500.960@0.0.1500.960" timestamp="1606031119375" />
   </component>
 </project>

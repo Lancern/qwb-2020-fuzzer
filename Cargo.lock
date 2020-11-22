@@ -7,6 +7,9 @@ version = "0.1.0"
 [[package]]
 name = "babynotes"
 version = "0.1.0"
+dependencies = [
+ "fuzzer",
+]
 
 [[package]]
 name = "cfg-if"
