@@ -12,13 +12,7 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5d25cade-c56c-4782-bf7c-ff0a46a49950" name="Default Changelist" comment="Fix build issues">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/babynotes/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/babynotes/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/babynotes/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/babynotes/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fuzzer/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/fuzzer/src/lib.rs" afterDir="false" />
-    </list>
+    <list default="true" id="5d25cade-c56c-4782-bf7c-ff0a46a49950" name="Default Changelist" comment="Add afl custom mutator interface to babynotes" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -85,7 +79,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1605883170217</updated>
-      <workItem from="1605883171507" duration="28348000" />
+      <workItem from="1605883171507" duration="28873000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1605883309155</created>
@@ -115,7 +109,21 @@
       <option name="project" value="LOCAL" />
       <updated>1606036107187</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Remove unnecessary CommandDataSpec::None and CommandData::None variants">
+      <created>1606037761606</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1606037761606</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Add afl custom mutator interface to babynotes">
+      <created>1606038004722</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1606038004722</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -126,7 +134,9 @@
     <MESSAGE value="Implement core functionalities of the fuzzer" />
     <MESSAGE value="Add license and readme" />
     <MESSAGE value="Fix build issues" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix build issues" />
+    <MESSAGE value="Remove unnecessary CommandDataSpec::None and CommandData::None variants" />
+    <MESSAGE value="Add afl custom mutator interface to babynotes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add afl custom mutator interface to babynotes" />
   </component>
   <component name="WindowStateProjectService">
     <state x="206" y="135" width="1086" height="712" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1606034644508">
@@ -141,26 +151,30 @@
       <screen x="0" y="0" width="1500" height="960" />
     </state>
     <state x="531" y="221" key="FileChooserDialogImpl/0.0.1500.960@0.0.1500.960" timestamp="1605883236272" />
-    <state width="1458" height="256" key="GridCell.Tab.0.bottom" timestamp="1606037684289">
+    <state width="1458" height="256" key="GridCell.Tab.0.bottom" timestamp="1606037731420">
       <screen x="0" y="0" width="1500" height="960" />
     </state>
-    <state width="1458" height="256" key="GridCell.Tab.0.bottom/0.0.1500.960@0.0.1500.960" timestamp="1606037684289" />
-    <state width="1458" height="256" key="GridCell.Tab.0.center" timestamp="1606037684289">
+    <state width="1458" height="256" key="GridCell.Tab.0.bottom/0.0.1500.960@0.0.1500.960" timestamp="1606037731420" />
+    <state width="1458" height="256" key="GridCell.Tab.0.center" timestamp="1606037731420">
       <screen x="0" y="0" width="1500" height="960" />
     </state>
-    <state width="1458" height="256" key="GridCell.Tab.0.center/0.0.1500.960@0.0.1500.960" timestamp="1606037684289" />
-    <state width="1458" height="256" key="GridCell.Tab.0.left" timestamp="1606037684289">
+    <state width="1458" height="256" key="GridCell.Tab.0.center/0.0.1500.960@0.0.1500.960" timestamp="1606037731420" />
+    <state width="1458" height="256" key="GridCell.Tab.0.left" timestamp="1606037731420">
       <screen x="0" y="0" width="1500" height="960" />
     </state>
-    <state width="1458" height="256" key="GridCell.Tab.0.left/0.0.1500.960@0.0.1500.960" timestamp="1606037684289" />
-    <state width="1458" height="256" key="GridCell.Tab.0.right" timestamp="1606037684289">
+    <state width="1458" height="256" key="GridCell.Tab.0.left/0.0.1500.960@0.0.1500.960" timestamp="1606037731420" />
+    <state width="1458" height="256" key="GridCell.Tab.0.right" timestamp="1606037731420">
       <screen x="0" y="0" width="1500" height="960" />
     </state>
-    <state width="1458" height="256" key="GridCell.Tab.0.right/0.0.1500.960@0.0.1500.960" timestamp="1606037684289" />
+    <state width="1458" height="256" key="GridCell.Tab.0.right/0.0.1500.960@0.0.1500.960" timestamp="1606037731420" />
     <state x="336" y="174" key="SettingsEditor" timestamp="1606018814264">
       <screen x="0" y="0" width="1500" height="960" />
     </state>
     <state x="336" y="174" key="SettingsEditor/0.0.1500.960@0.0.1500.960" timestamp="1606018814264" />
+    <state x="343" y="213" key="Vcs.Push.Dialog.v2" timestamp="1606038008101">
+      <screen x="0" y="0" width="1500" height="960" />
+    </state>
+    <state x="343" y="213" key="Vcs.Push.Dialog.v2/0.0.1500.960@0.0.1500.960" timestamp="1606038008101" />
     <state x="414" y="207" width="672" height="678" key="search.everywhere.popup" timestamp="1606031119375">
       <screen x="0" y="0" width="1500" height="960" />
     </state>
