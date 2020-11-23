@@ -1,8 +1,9 @@
+extern crate bincode;
 extern crate fuzzer;
 
 use std::os::raw::{c_uint, c_void};
 
-use fuzzer::{CommandDataSpec, CommandSpec, FuzzerBuilder, CommandData};
+use fuzzer::{Command, CommandDataSpec, CommandSpec, Fuzzer, FuzzerBuilder, Input};
 
 #[allow(non_camel_case_types)]
 type afl_t = c_void;
@@ -17,7 +18,7 @@ const CMD_EXIT: i32 = 7;
 
 #[no_mangle]
 pub extern "C" fn afl_custom_init(afl: *const afl_t, seed: c_uint) -> *const c_void {
-    let fuzzer = FuzzerBuilder::new(afl, seed as u32)
+    let f = FuzzerBuilder::new(afl, seed as u32)
         .add_spec(CommandSpec {
             id: CMD_ADD_NOTE,
             data: vec![
@@ -27,22 +28,24 @@ pub extern "C" fn afl_custom_init(afl: *const afl_t, seed: c_uint) -> *const c_v
         })
         .add_spec(CommandSpec {
             id: CMD_SHOW_NOTE,
-            data: vec![
-                CommandDataSpec::UInt { min: 0, max: 5 },
-            ]
+            data: vec![CommandDataSpec::UInt { min: 0, max: 5 }],
         })
         .add_spec(CommandSpec {
             id: CMD_DELETE_NOTE,
-            data: vec![
-                CommandDataSpec::SInt { min: std::i64::MIN, max: 3 },
-            ]
+            data: vec![CommandDataSpec::SInt {
+                min: std::i64::MIN,
+                max: 3,
+            }],
         })
         .add_spec(CommandSpec {
             id: CMD_EDIT_NOTE,
             data: vec![
                 CommandDataSpec::UInt { min: 0, max: 3 },
-                CommandDataSpec::Binary { min_len: 1, max_len: 512 },
-            ]
+                CommandDataSpec::Binary {
+                    min_len: 1,
+                    max_len: 512,
+                },
+            ],
         })
         .add_spec(CommandSpec {
             id: CMD_RESET,
@@ -57,7 +60,7 @@ pub extern "C" fn afl_custom_init(afl: *const afl_t, seed: c_uint) -> *const c_v
             data: vec![],
         })
         .build();
-    Box::into_raw(fuzzer) as *const c_void
+    Box::into_raw(f) as *const c_void
 }
 
 #[no_mangle]
@@ -66,11 +69,22 @@ pub extern "C" fn afl_custom_fuzz(
     buf: *const u8,
     buf_size: usize,
     out_buf: *mut *const u8,
-    add_buf: *const u8,
-    add_buf_size: usize,
-    max_size: usize,
+    _add_buf: *const u8,
+    _add_buf_size: usize,
+    _max_size: usize,
 ) -> usize {
-    unimplemented!()
+    let f = as_fuzzer(data);
+    let buf = unsafe { std::slice::from_raw_parts(buf, buf_size) };
+    let mut input = bincode::deserialize::<Input>(buf).expect("deserialize input failed");
+
+    f.mutate(&mut input);
+
+    bincode::serialize_into(f.alloc_buf(), &input).expect("serialize input failed");
+
+    unsafe {
+        *out_buf = f.get_buf().as_ptr();
+    }
+    f.get_buf().len()
 }
 
 #[no_mangle]
@@ -80,10 +94,30 @@ pub extern "C" fn afl_custom_post_process(
     buf_size: usize,
     out_buf: *mut *const u8,
 ) -> usize {
-    unimplemented!()
+    let f = as_fuzzer(data);
+    let buf = unsafe { std::slice::from_raw_parts(buf, buf_size) };
+    let mut input = bincode::deserialize::<Input>(buf).expect("deserialize input failed");
+
+    input.commands.push(Command {
+        id: CMD_EXIT,
+        data: vec![],
+    });
+
+    input
+        .synthesis_into(f.alloc_buf())
+        .expect("synthesis input failed");
+
+    unsafe {
+        *out_buf = f.get_buf().as_ptr();
+    }
+    f.get_buf().len()
 }
 
 #[no_mangle]
 pub extern "C" fn afl_custom_deinit(data: *const c_void) {
-    unimplemented!()
+    unsafe { Box::from_raw(data as *mut Fuzzer) };
+}
+
+fn as_fuzzer<'a>(ptr: *const c_void) -> &'a mut Fuzzer {
+    unsafe { (ptr as *mut Fuzzer).as_mut().expect("null fuzzer pointer") }
 }

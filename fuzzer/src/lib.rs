@@ -8,6 +8,7 @@ use rand::distributions::Uniform;
 use rand::{Rng, SeedableRng};
 use rand_pcg::Pcg32;
 use serde::{Deserialize, Serialize};
+use std::io::Write;
 
 #[derive(Clone, Debug)]
 pub struct CommandSpec {
@@ -64,7 +65,7 @@ const MUTATE_INT_DELTA: u64 = 20;
 const MUTATE_BUF_EXTEND_PROB: f64 = 0.3;
 const MUTATE_BUF_SPLICE_PROB: f64 = 0.3;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Input {
     pub commands: Vec<Command>,
 }
@@ -104,6 +105,16 @@ impl Input {
             .find(|s| s.id == cmd.id)
             .expect("unknown command ID");
         cmd.mutate(spec, rng);
+    }
+
+    pub fn synthesis_into<W>(&self, output: &mut W) -> std::io::Result<()>
+    where
+        W: ?Sized + Write
+    {
+        for cmd in &self.commands {
+            cmd.synthesis_into(output)?;
+        }
+        Ok(())
     }
 }
 
@@ -147,6 +158,34 @@ impl Command {
             }
             _ => panic!("Command data mismatches with command data spec"),
         };
+    }
+
+    fn synthesis_into<W>(&self, output: &mut W) -> std::io::Result<()>
+    where
+        W: ?Sized + Write
+    {
+        output.write_fmt(format_args!("{}\n", self.id))?;
+        for data in &self.data {
+            data.synthesis_into(output)?;
+        }
+        Ok(())
+    }
+}
+
+impl CommandData {
+    fn synthesis_into<W>(&self, output: &mut W) -> std::io::Result<()>
+    where
+        W: ?Sized + Write
+    {
+        match self {
+            Self::SInt(value) => output.write_fmt(format_args!("{}\n", *value)),
+            Self::UInt(value) => output.write_fmt(format_args!("{}\n", *value)),
+            Self::Binary(value) => {
+                output.write_all(value)?;
+                output.write_fmt(format_args!("\n"))?;
+                Ok(())
+            },
+        }
     }
 }
 
@@ -238,6 +277,7 @@ pub struct Fuzzer {
     afl: *const c_void,
     spec: Vec<CommandSpec>,
     rng: Pcg32,
+    buf: Vec<u8>,
 }
 
 impl Fuzzer {
@@ -251,6 +291,15 @@ impl Fuzzer {
 
     pub fn mutate(&mut self, input: &mut Input) {
         input.mutate(&self.spec, &mut self.rng);
+    }
+
+    pub fn get_buf(&self) -> &[u8] {
+        &self.buf
+    }
+
+    pub fn alloc_buf(&mut self) -> &mut Vec<u8> {
+        self.buf.clear();
+        &mut self.buf
     }
 }
 
@@ -294,6 +343,7 @@ impl FuzzerBuilder {
             afl: self.afl,
             spec: self.spec,
             rng: Pcg32::seed_from_u64(self.rng_seed as u64),
+            buf: Vec::new(),
         })
     }
 }
