@@ -2,13 +2,13 @@ extern crate rand;
 extern crate rand_pcg;
 extern crate serde;
 
+use std::io::Write;
 use std::os::raw::c_void;
 
 use rand::distributions::Uniform;
 use rand::{Rng, SeedableRng};
 use rand_pcg::Pcg32;
 use serde::{Deserialize, Serialize};
-use std::io::Write;
 
 #[derive(Clone, Debug)]
 pub struct CommandSpec {
@@ -61,9 +61,9 @@ impl CommandDataSpec {
 const MUTATE_ADD_CMD_PROB: f64 = 0.3;
 const MUTATE_REMOVE_CMD_PROB: f64 = 0.3;
 const MUTATE_INT_REGEN_PROB: f64 = 0.2;
-const MUTATE_INT_DELTA: u64 = 20;
 const MUTATE_BUF_EXTEND_PROB: f64 = 0.3;
 const MUTATE_BUF_SPLICE_PROB: f64 = 0.3;
+const MUTATE_BYTE_DELTA: i8 = 10;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Input {
@@ -203,10 +203,19 @@ where
         *value = rng.sample(Uniform::new_inclusive(min, max));
         return;
     }
-    let max_add = std::cmp::min(MUTATE_INT_DELTA as i64, max - *value);
-    let max_sub = std::cmp::min(MUTATE_INT_DELTA as i64, *value - min);
-    let delta = rng.sample(Uniform::new_inclusive(-max_sub, max_add));
-    *value += delta;
+
+    if *value == min && *value == max {
+        return;
+    }
+
+    if *value > min && rng.gen::<f64>() <= 0.5 {
+        *value -= 1;
+        return;
+    }
+
+    if *value < max {
+        *value += 1;
+    }
 }
 
 pub fn mutate_unsigned_int<R>(value: &mut u64, min: u64, max: u64, rng: &mut R)
@@ -219,10 +228,19 @@ where
         *value = rng.sample(Uniform::new_inclusive(min, max));
         return;
     }
-    let max_add = std::cmp::min(MUTATE_INT_DELTA, max - *value);
-    let max_sub = std::cmp::min(MUTATE_INT_DELTA, *value - min);
-    let delta = rng.sample(Uniform::new_inclusive(-(max_sub as i64), max_add as i64));
-    *value = (*value as i64 + delta) as u64;
+
+    if *value == min && *value == max {
+        return;
+    }
+
+    if *value > min && rng.gen::<f64>() <= 0.5 {
+        *value -= 1;
+        return;
+    }
+
+    if *value < max {
+        *value += 1;
+    }
 }
 
 pub fn mutate_buf<R>(buf: &mut Vec<u8>, min_len: usize, max_len: usize, rng: &mut R)
@@ -277,8 +295,8 @@ where
 {
     let target = random_select_mut(rng, bytes);
     let delta = rng.sample(Uniform::new_inclusive(
-        -(MUTATE_INT_DELTA as i8),
-        MUTATE_INT_DELTA as i8,
+        -MUTATE_BYTE_DELTA,
+        MUTATE_BYTE_DELTA,
     ));
     let delta = unsafe { std::mem::transmute::<i8, u8>(delta) };
     *target = target.wrapping_add(delta);
