@@ -1,6 +1,6 @@
 [workspace]
 members = [
     "fuzzer",
-    "babyheap",
-    "babynotes",
+    "babyheap-mutator",
+    "babynotes-mutator",
 ]
