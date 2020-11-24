@@ -91,7 +91,7 @@ fn generate(path: &Path) {
     };
 }
 
-fn synthesis(input_path: &Path, output_path: &Path)  {
+fn synthesis(input_path: &Path, output_path: &Path) {
     if !input_path.exists() {
         eprintln!("Error: no such seed file: {}", input_path.display());
         return;
@@ -108,14 +108,14 @@ fn synthesis(input_path: &Path, output_path: &Path)  {
             Err(e) => {
                 eprintln!("Error: cannot open input file: {}", e);
                 return;
-            },
+            }
         };
         match bincode::deserialize_from::<File, Input>(file) {
             Ok(input) => input,
             Err(e) => {
                 eprintln!("Error: cannot deserialize seed input: {}", e);
                 return;
-            },
+            }
         }
     };
 
@@ -124,14 +124,17 @@ fn synthesis(input_path: &Path, output_path: &Path)  {
         Err(e) => {
             eprintln!("Error: cannot create output file: {}", e);
             return;
-        },
-    };
-
-    match bincode::serialize_into(file, &input) {
-        Ok(_) => (),
-        Err(e) => {
-            eprintln!("Error: cannot write synthesised input: {}", e);
-            return;
         }
     };
+
+    match input.synthesis_into(file) {
+        Ok(_) => (),
+        Err(e) => {
+            eprintln!(
+                "Error: cannot write synthesised seed into output file: {}",
+                e
+            );
+            return;
+        }
+    }
 }
