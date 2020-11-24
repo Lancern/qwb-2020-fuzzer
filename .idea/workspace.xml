@@ -10,16 +10,14 @@
   </component>
   <component name="CargoProjects">
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
+    <cargoProject FILE="$PROJECT_DIR$/babynotes-seed-gen/Cargo.toml" />
+    <cargoProject FILE="$PROJECT_DIR$/babyheap-seed-gen/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5d25cade-c56c-4782-bf7c-ff0a46a49950" name="Default Changelist" comment="Add afl custom mutator interface to babynotes">
+    <list default="true" id="5d25cade-c56c-4782-bf7c-ff0a46a49950" name="Default Changelist" comment="Move custom mutators to mutator crates">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/babyheap/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/babyheap-mutator/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/babyheap/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/babyheap-mutator/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/babynotes/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/babynotes-mutator/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/babynotes/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/babynotes-mutator/src/lib.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,7 +143,14 @@
       <option name="project" value="LOCAL" />
       <updated>1606038374252</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Move custom mutators to mutator crates">
+      <created>1606203769861</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1606203769861</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -158,7 +163,8 @@
     <MESSAGE value="Fix build issues" />
     <MESSAGE value="Remove unnecessary CommandDataSpec::None and CommandData::None variants" />
     <MESSAGE value="Add afl custom mutator interface to babynotes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add afl custom mutator interface to babynotes" />
+    <MESSAGE value="Move custom mutators to mutator crates" />
+    <option name="LAST_COMMIT_MESSAGE" value="Move custom mutators to mutator crates" />
   </component>
   <component name="WindowStateProjectService">
     <state x="206" y="135" width="1086" height="712" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1606034644508">
@@ -197,10 +203,10 @@
       <screen x="0" y="0" width="1500" height="960" />
     </state>
     <state x="336" y="174" key="SettingsEditor/0.0.1500.960@0.0.1500.960" timestamp="1606203361146" />
-    <state x="343" y="213" key="Vcs.Push.Dialog.v2" timestamp="1606038377563">
+    <state x="343" y="213" key="Vcs.Push.Dialog.v2" timestamp="1606203778283">
       <screen x="0" y="0" width="1500" height="960" />
     </state>
-    <state x="343" y="213" key="Vcs.Push.Dialog.v2/0.0.1500.960@0.0.1500.960" timestamp="1606038377563" />
+    <state x="343" y="213" key="Vcs.Push.Dialog.v2/0.0.1500.960@0.0.1500.960" timestamp="1606203778283" />
     <state x="414" y="207" width="672" height="678" key="search.everywhere.popup" timestamp="1606031119375">
       <screen x="0" y="0" width="1500" height="960" />
     </state>

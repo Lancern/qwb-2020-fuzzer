@@ -3,4 +3,6 @@ members = [
     "fuzzer",
     "babyheap-mutator",
     "babynotes-mutator",
+    "babyheap-seed-gen",
+    "babynotes-seed-gen",
 ]
