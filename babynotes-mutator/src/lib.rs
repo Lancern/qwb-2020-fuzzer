@@ -3,7 +3,7 @@ extern crate fuzzer;
 extern crate serde;
 
 use std::io::Write;
-use std::os::raw::{c_uint, c_void};
+use std::os::raw::{c_int, c_uint, c_void};
 
 use fuzzer::{
     Command, CommandDataSpec, CommandSpec, Fuzzer, FuzzerBuilder, Input as CommandsInput,
@@ -171,6 +171,25 @@ pub extern "C" fn afl_custom_post_process(
         *out_buf = f.get_buf().as_ptr();
     }
     f.get_buf().len()
+}
+
+#[no_mangle]
+pub extern "C" fn afl_custom_init_trim(
+    _data: *const c_void,
+    _buf: *const u8,
+    _buf_size: usize,
+) -> c_int {
+    0
+}
+
+#[no_mangle]
+pub extern "C" fn afl_custom_trim(_data: *const c_void, _out_buf: *mut *const u8) -> usize {
+    0
+}
+
+#[no_mangle]
+pub extern "C" fn afl_custom_post_trim(_data: *const c_void, _success: u8) -> c_int {
+    0
 }
 
 #[no_mangle]
