@@ -1,9 +1,14 @@
 extern crate bincode;
 extern crate fuzzer;
+extern crate serde;
 
 use std::os::raw::{c_uint, c_void};
 
-use fuzzer::{Command, CommandDataSpec, CommandSpec, Fuzzer, FuzzerBuilder, Input};
+use fuzzer::{
+    Command, CommandDataSpec, CommandSpec, Fuzzer, FuzzerBuilder, Input as CommandsInput,
+};
+use rand::distributions::Uniform;
+use std::io::Write;
 
 #[allow(non_camel_case_types)]
 type afl_t = c_void;
@@ -15,6 +20,48 @@ const CMD_EDIT_NOTE: i32 = 4;
 const CMD_RESET: i32 = 5;
 const CMD_CHECK: i32 = 6;
 const CMD_EXIT: i32 = 7;
+
+const MUTATE_HEADER_PROB: f64 = 0.1;
+
+#[derive(Debug)]
+pub struct Input {
+    pub name: [u8; 0x18],
+    pub motto: [u8; 0x20],
+    pub age: i64,
+    pub commands: CommandsInput,
+}
+
+impl Input {
+    pub fn mutate(&mut self, fz: &mut Fuzzer) {
+        if fz.rng_mut().gen::<f64>() <= MUTATE_HEADER_PROB {
+            let target = fz.rng_mut().sample(Uniform::new(0, 3));
+            match target {
+                0 => fuzzer::mutate_bytes(&mut self.name, fz.rng_mut()),
+                1 => fuzzer::mutate_bytes(&mut self.motto, fz.rng_mut()),
+                2 => fuzzer::mutate_signed_int(
+                    &mut self.age,
+                    std::i64::MIN,
+                    std::i64::MAX,
+                    fz.rng_mut(),
+                ),
+                _ => unreachable!(),
+            }
+        } else {
+            fz.mutate(&mut self.commands);
+        }
+    }
+
+    pub fn synthesis_into<W>(&self, mut output: W) -> std::io::Result<()>
+    where
+        W: Write,
+    {
+        output.write_all(&self.name)?;
+        output.write_all(&self.motto)?;
+        output.write_fmt(format_args!("{}\n", self.age))?;
+        self.commands.synthesis_into(output)?;
+        Ok(())
+    }
+}
 
 #[no_mangle]
 pub extern "C" fn afl_custom_init(afl: *const afl_t, seed: c_uint) -> *const c_void {
@@ -77,7 +124,7 @@ pub extern "C" fn afl_custom_fuzz(
     let buf = unsafe { std::slice::from_raw_parts(buf, buf_size) };
     let mut input = bincode::deserialize::<Input>(buf).expect("deserialize input failed");
 
-    f.mutate(&mut input);
+    input.mutate(f);
 
     bincode::serialize_into(f.alloc_buf(), &input).expect("serialize input failed");
 
@@ -98,7 +145,7 @@ pub extern "C" fn afl_custom_post_process(
     let buf = unsafe { std::slice::from_raw_parts(buf, buf_size) };
     let mut input = bincode::deserialize::<Input>(buf).expect("deserialize input failed");
 
-    input.commands.push(Command {
+    input.commands.commands.push(Command {
         id: CMD_EXIT,
         data: vec![],
     });

@@ -189,7 +189,7 @@ impl CommandData {
     }
 }
 
-fn mutate_signed_int<R>(value: &mut i64, min: i64, max: i64, rng: &mut R)
+pub fn mutate_signed_int<R>(value: &mut i64, min: i64, max: i64, rng: &mut R)
 where
     R: ?Sized + Rng,
 {
@@ -205,7 +205,7 @@ where
     *value += delta;
 }
 
-fn mutate_unsigned_int<R>(value: &mut u64, min: u64, max: u64, rng: &mut R)
+pub fn mutate_unsigned_int<R>(value: &mut u64, min: u64, max: u64, rng: &mut R)
 where
     R: ?Sized + Rng,
 {
@@ -221,7 +221,7 @@ where
     *value = (*value as i64 + delta) as u64;
 }
 
-fn mutate_buf<R>(buf: &mut Vec<u8>, min_len: usize, max_len: usize, rng: &mut R)
+pub fn mutate_buf<R>(buf: &mut Vec<u8>, min_len: usize, max_len: usize, rng: &mut R)
 where
     R: ?Sized + Rng,
 {
@@ -264,7 +264,14 @@ where
     }
 
     // Perform arithmetic operation on some byte.
-    let target = random_select_mut(rng, buf);
+    mutate_bytes(buf, rng);
+}
+
+pub fn mutate_bytes<R>(bytes: &mut [u8], rng: &mut R)
+where
+    R: ?Sized + Rng
+{
+    let target = random_select_mut(rng, bytes);
     let delta = rng.sample(Uniform::new_inclusive(
         -(MUTATE_INT_DELTA as i8),
         MUTATE_INT_DELTA as i8,

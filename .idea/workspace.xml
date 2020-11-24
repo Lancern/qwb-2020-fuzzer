@@ -14,8 +14,11 @@
     <cargoProject FILE="$PROJECT_DIR$/babyheap-seed-gen/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5d25cade-c56c-4782-bf7c-ff0a46a49950" name="Default Changelist" comment="Finish babynotes-seed-gen">
+    <list default="true" id="5d25cade-c56c-4782-bf7c-ff0a46a49950" name="Default Changelist" comment="Add function to access RNG in a fuzzer">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/babynotes-mutator/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/babynotes-mutator/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/babynotes-mutator/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/babynotes-mutator/src/lib.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fuzzer/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/fuzzer/src/lib.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -163,7 +166,14 @@
       <option name="project" value="LOCAL" />
       <updated>1606204995318</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Add function to access RNG in a fuzzer">
+      <created>1606206208416</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1606206208416</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -179,7 +189,8 @@
     <MESSAGE value="Move custom mutators to mutator crates" />
     <MESSAGE value="Add babyheap-seed-gen and babynotes-seed-gen" />
     <MESSAGE value="Finish babynotes-seed-gen" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finish babynotes-seed-gen" />
+    <MESSAGE value="Add function to access RNG in a fuzzer" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add function to access RNG in a fuzzer" />
   </component>
   <component name="WindowStateProjectService">
     <state x="206" y="135" width="1086" height="712" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1606034644508">
