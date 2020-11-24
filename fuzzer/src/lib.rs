@@ -145,6 +145,10 @@ impl Command {
         assert_eq!(spec.id, self.id);
         assert_eq!(self.data.len(), spec.data.len());
 
+        if self.data.is_empty() {
+            return;
+        }
+
         let data_idx = rng.sample(Uniform::new(0, self.data.len()));
         match (&mut self.data[data_idx], &spec.data[data_idx]) {
             (CommandData::SInt(value), CommandDataSpec::SInt { min, max }) => {
