@@ -289,6 +289,14 @@ impl Fuzzer {
         &self.spec
     }
 
+    pub fn rng(&self) -> &impl Rng {
+        &self.rng
+    }
+
+    pub fn rng_mut(&mut self) -> &mut impl Rng {
+        &mut self.rng
+    }
+
     pub fn mutate(&mut self, input: &mut Input) {
         input.mutate(&self.spec, &mut self.rng);
     }
