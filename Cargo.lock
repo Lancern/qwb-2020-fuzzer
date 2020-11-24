@@ -25,7 +25,7 @@ name = "babyheap-mutator"
 version = "0.1.0"
 
 [[package]]
-name = "babyheap-seed-gen"
+name = "babyheap-seed-cli"
 version = "0.1.0"
 
 [[package]]
@@ -39,7 +39,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "babynotes-seed-gen"
+name = "babynotes-seed-cli"
 version = "0.1.0"
 dependencies = [
  "babynotes-mutator",
