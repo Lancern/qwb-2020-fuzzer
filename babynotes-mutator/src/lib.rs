@@ -139,12 +139,12 @@ pub extern "C" fn afl_custom_fuzz(
 
     input.mutate(f);
 
-    bincode::serialize_into(f.alloc_buf(), &input).expect("serialize input failed");
+    bincode::serialize_into(f.alloc_fuzz_buf(), &input).expect("serialize input failed");
 
     unsafe {
-        *out_buf = f.get_buf().as_ptr();
+        *out_buf = f.fuzz_buf().as_ptr();
     }
-    f.get_buf().len()
+    f.fuzz_buf().len()
 }
 
 #[no_mangle]
@@ -164,13 +164,13 @@ pub extern "C" fn afl_custom_post_process(
     });
 
     input
-        .synthesis_into(f.alloc_buf())
+        .synthesis_into(f.alloc_post_buf())
         .expect("synthesis input failed");
 
     unsafe {
-        *out_buf = f.get_buf().as_ptr();
+        *out_buf = f.post_buf().as_ptr();
     }
-    f.get_buf().len()
+    f.post_buf().len()
 }
 
 #[no_mangle]

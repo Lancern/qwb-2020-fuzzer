@@ -306,7 +306,8 @@ pub struct Fuzzer {
     afl: *const c_void,
     spec: Vec<CommandSpec>,
     rng: Pcg32,
-    buf: Vec<u8>,
+    fuzz_buf: Vec<u8>,
+    post_buf: Vec<u8>,
 }
 
 impl Fuzzer {
@@ -330,13 +331,22 @@ impl Fuzzer {
         input.mutate(&self.spec, &mut self.rng);
     }
 
-    pub fn get_buf(&self) -> &[u8] {
-        &self.buf
+    pub fn fuzz_buf(&self) -> &[u8] {
+        &self.fuzz_buf
     }
 
-    pub fn alloc_buf(&mut self) -> &mut Vec<u8> {
-        self.buf.clear();
-        &mut self.buf
+    pub fn post_buf(&self) -> &[u8] {
+        &self.post_buf
+    }
+
+    pub fn alloc_fuzz_buf(&mut self) -> &mut Vec<u8> {
+        self.fuzz_buf.clear();
+        &mut self.fuzz_buf
+    }
+
+    pub fn alloc_post_buf(&mut self) -> &mut Vec<u8> {
+        self.post_buf.clear();
+        &mut self.post_buf
     }
 }
 
@@ -380,7 +390,8 @@ impl FuzzerBuilder {
             afl: self.afl,
             spec: self.spec,
             rng: Pcg32::seed_from_u64(self.rng_seed as u64),
-            buf: Vec::new(),
+            fuzz_buf: Vec::new(),
+            post_buf: Vec::new(),
         })
     }
 }
