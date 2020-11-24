@@ -14,10 +14,13 @@
     <cargoProject FILE="$PROJECT_DIR$/babyheap-seed-gen/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5d25cade-c56c-4782-bf7c-ff0a46a49950" name="Default Changelist" comment="Bug fixes">
+    <list default="true" id="5d25cade-c56c-4782-bf7c-ff0a46a49950" name="Default Changelist" comment="Fix build issues">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/babynotes-mutator/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/babynotes-mutator/Cargo.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/babynotes-mutator/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/babynotes-mutator/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fuzzer/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/fuzzer/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/babynotes-seed-gen/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/babynotes-seed-gen/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/babynotes-seed-gen/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/babynotes-seed-gen/src/main.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -178,7 +181,14 @@
       <option name="project" value="LOCAL" />
       <updated>1606213888331</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Fix build issues">
+      <created>1606214142035</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1606214142035</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -188,7 +198,6 @@
     <MESSAGE value="Initial commit" />
     <MESSAGE value="Implement core functionalities of the fuzzer" />
     <MESSAGE value="Add license and readme" />
-    <MESSAGE value="Fix build issues" />
     <MESSAGE value="Remove unnecessary CommandDataSpec::None and CommandData::None variants" />
     <MESSAGE value="Add afl custom mutator interface to babynotes" />
     <MESSAGE value="Move custom mutators to mutator crates" />
@@ -196,7 +205,8 @@
     <MESSAGE value="Finish babynotes-seed-gen" />
     <MESSAGE value="Add function to access RNG in a fuzzer" />
     <MESSAGE value="Bug fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bug fixes" />
+    <MESSAGE value="Fix build issues" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix build issues" />
   </component>
   <component name="WindowStateProjectService">
     <state x="206" y="135" width="1086" height="712" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1606034644508">
@@ -211,38 +221,38 @@
       <screen x="0" y="0" width="1500" height="960" />
     </state>
     <state x="531" y="221" key="FileChooserDialogImpl/0.0.1500.960@0.0.1500.960" timestamp="1605883236272" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1606214124530">
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1606214864318">
       <screen x="767" y="-1080" width="1920" height="1040" />
     </state>
     <state width="1458" height="256" key="GridCell.Tab.0.bottom/0.0.1500.960/767.-1080.1920.1040@0.0.1500.960" timestamp="1606110079077" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1500.960/767.-1080.1920.1040@767.-1080.1920.1040" timestamp="1606214124530" />
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1500.960/767.-1080.1920.1040@767.-1080.1920.1040" timestamp="1606214864318" />
     <state width="1458" height="256" key="GridCell.Tab.0.bottom/0.0.1500.960@0.0.1500.960" timestamp="1606037731420" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1606214124530">
+    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1606214864318">
       <screen x="767" y="-1080" width="1920" height="1040" />
     </state>
     <state width="1458" height="256" key="GridCell.Tab.0.center/0.0.1500.960/767.-1080.1920.1040@0.0.1500.960" timestamp="1606110079077" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1500.960/767.-1080.1920.1040@767.-1080.1920.1040" timestamp="1606214124530" />
+    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1500.960/767.-1080.1920.1040@767.-1080.1920.1040" timestamp="1606214864318" />
     <state width="1458" height="256" key="GridCell.Tab.0.center/0.0.1500.960@0.0.1500.960" timestamp="1606037731420" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1606214124530">
+    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1606214864318">
       <screen x="767" y="-1080" width="1920" height="1040" />
     </state>
     <state width="1458" height="256" key="GridCell.Tab.0.left/0.0.1500.960/767.-1080.1920.1040@0.0.1500.960" timestamp="1606110079077" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1500.960/767.-1080.1920.1040@767.-1080.1920.1040" timestamp="1606214124530" />
+    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1500.960/767.-1080.1920.1040@767.-1080.1920.1040" timestamp="1606214864318" />
     <state width="1458" height="256" key="GridCell.Tab.0.left/0.0.1500.960@0.0.1500.960" timestamp="1606037731420" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1606214124530">
+    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1606214864318">
       <screen x="767" y="-1080" width="1920" height="1040" />
     </state>
     <state width="1458" height="256" key="GridCell.Tab.0.right/0.0.1500.960/767.-1080.1920.1040@0.0.1500.960" timestamp="1606110079077" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1500.960/767.-1080.1920.1040@767.-1080.1920.1040" timestamp="1606214124530" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1500.960/767.-1080.1920.1040@767.-1080.1920.1040" timestamp="1606214864318" />
     <state width="1458" height="256" key="GridCell.Tab.0.right/0.0.1500.960@0.0.1500.960" timestamp="1606037731420" />
     <state x="336" y="174" key="SettingsEditor" timestamp="1606204580806">
       <screen x="0" y="0" width="1500" height="960" />
     </state>
     <state x="336" y="174" key="SettingsEditor/0.0.1500.960@0.0.1500.960" timestamp="1606204580806" />
-    <state x="1206" y="-849" key="Vcs.Push.Dialog.v2" timestamp="1606213897281">
+    <state x="1206" y="-849" key="Vcs.Push.Dialog.v2" timestamp="1606214149378">
       <screen x="767" y="-1080" width="1920" height="1040" />
     </state>
-    <state x="1206" y="-849" key="Vcs.Push.Dialog.v2/0.0.1500.960/767.-1080.1920.1040@767.-1080.1920.1040" timestamp="1606213897281" />
+    <state x="1206" y="-849" key="Vcs.Push.Dialog.v2/0.0.1500.960/767.-1080.1920.1040@767.-1080.1920.1040" timestamp="1606214149378" />
     <state x="343" y="213" key="Vcs.Push.Dialog.v2/0.0.1500.960@0.0.1500.960" timestamp="1606205001403" />
     <state x="1297" y="-856" width="861" height="735" key="search.everywhere.popup" timestamp="1606214041372">
       <screen x="767" y="-1080" width="1920" height="1040" />

@@ -1,3 +1,4 @@
+extern crate babynotes_mutator;
 extern crate bincode;
 extern crate clap;
 extern crate fuzzer;
@@ -5,7 +6,8 @@ extern crate fuzzer;
 use std::fs::File;
 use std::path::PathBuf;
 
-use fuzzer::{Input, Command};
+use babynotes_mutator::Input;
+use fuzzer::Command;
 
 const CMD_EXIT: i32 = 7;
 
@@ -40,7 +42,7 @@ fn main() {
     };
 
     let mut input = Input::new();
-    input.commands.push(Command {
+    input.commands.commands.push(Command {
         id: CMD_EXIT,
         data: vec![],
     });

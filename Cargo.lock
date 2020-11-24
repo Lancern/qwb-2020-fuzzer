@@ -42,6 +42,7 @@ dependencies = [
 name = "babynotes-seed-gen"
 version = "0.1.0"
 dependencies = [
+ "babynotes-mutator",
  "bincode",
  "clap",
  "fuzzer",

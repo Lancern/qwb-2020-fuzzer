@@ -34,6 +34,17 @@ pub struct Input {
 }
 
 impl Input {
+    pub fn new() -> Self {
+        Self {
+            name: [0u8; 0x18],
+            motto: [0u8; 0x20],
+            age: 0,
+            commands: CommandsInput::new(),
+        }
+    }
+}
+
+impl Input {
     pub fn mutate(&mut self, fz: &mut Fuzzer) {
         if fz.rng_mut().gen::<f64>() <= MUTATE_HEADER_PROB {
             let target = fz.rng_mut().sample(Uniform::new(0, 3));
