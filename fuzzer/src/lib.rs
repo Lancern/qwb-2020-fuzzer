@@ -107,12 +107,12 @@ impl Input {
         cmd.mutate(spec, rng);
     }
 
-    pub fn synthesis_into<W>(&self, output: &mut W) -> std::io::Result<()>
+    pub fn synthesis_into<W>(&self, mut output: W) -> std::io::Result<()>
     where
-        W: ?Sized + Write
+        W: Write,
     {
         for cmd in &self.commands {
-            cmd.synthesis_into(output)?;
+            cmd.synthesis_into(&mut output)?;
         }
         Ok(())
     }
@@ -162,7 +162,7 @@ impl Command {
 
     fn synthesis_into<W>(&self, output: &mut W) -> std::io::Result<()>
     where
-        W: ?Sized + Write
+        W: ?Sized + Write,
     {
         output.write_fmt(format_args!("{}\n", self.id))?;
         for data in &self.data {
@@ -175,7 +175,7 @@ impl Command {
 impl CommandData {
     fn synthesis_into<W>(&self, output: &mut W) -> std::io::Result<()>
     where
-        W: ?Sized + Write
+        W: ?Sized + Write,
     {
         match self {
             Self::SInt(value) => output.write_fmt(format_args!("{}\n", *value)),
@@ -184,7 +184,7 @@ impl CommandData {
                 output.write_all(value)?;
                 output.write_fmt(format_args!("\n"))?;
                 Ok(())
-            },
+            }
         }
     }
 }
@@ -269,7 +269,7 @@ where
 
 pub fn mutate_bytes<R>(bytes: &mut [u8], rng: &mut R)
 where
-    R: ?Sized + Rng
+    R: ?Sized + Rng,
 {
     let target = random_select_mut(rng, bytes);
     let delta = rng.sample(Uniform::new_inclusive(

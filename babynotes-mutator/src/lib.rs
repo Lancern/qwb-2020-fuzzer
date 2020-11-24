@@ -2,13 +2,15 @@ extern crate bincode;
 extern crate fuzzer;
 extern crate serde;
 
+use std::io::Write;
 use std::os::raw::{c_uint, c_void};
 
 use fuzzer::{
     Command, CommandDataSpec, CommandSpec, Fuzzer, FuzzerBuilder, Input as CommandsInput,
 };
 use rand::distributions::Uniform;
-use std::io::Write;
+use rand::Rng;
+use serde::{Deserialize, Serialize};
 
 #[allow(non_camel_case_types)]
 type afl_t = c_void;
@@ -23,7 +25,7 @@ const CMD_EXIT: i32 = 7;
 
 const MUTATE_HEADER_PROB: f64 = 0.1;
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Input {
     pub name: [u8; 0x18],
     pub motto: [u8; 0x20],
