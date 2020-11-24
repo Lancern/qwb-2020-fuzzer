@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/babynotes-mutator/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/fuzzer/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/babynotes-seed-gen/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/babyheap-seed-gen/src" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

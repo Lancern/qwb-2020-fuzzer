@@ -14,10 +14,12 @@
     <cargoProject FILE="$PROJECT_DIR$/babyheap-seed-gen/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5d25cade-c56c-4782-bf7c-ff0a46a49950" name="Default Changelist" comment="Move custom mutators to mutator crates">
+    <list default="true" id="5d25cade-c56c-4782-bf7c-ff0a46a49950" name="Default Changelist" comment="Add babyheap-seed-gen and babynotes-seed-gen">
+      <change beforePath="$PROJECT_DIR$/.idea/qwb-fuzzer.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/qwb-fuzzer.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/babynotes-seed-gen/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/babynotes-seed-gen/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/babynotes-seed-gen/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/babynotes-seed-gen/src/main.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +61,7 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="org.rust.cargo.project.model.PROJECT_DISCOVERY" value="true" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="language.rust.rustfmt" />
   </component>
   <component name="RunManager">
     <configuration name="Build" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
@@ -150,7 +152,14 @@
       <option name="project" value="LOCAL" />
       <updated>1606203769861</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Add babyheap-seed-gen and babynotes-seed-gen">
+      <created>1606203846260</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1606203846260</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -164,7 +173,8 @@
     <MESSAGE value="Remove unnecessary CommandDataSpec::None and CommandData::None variants" />
     <MESSAGE value="Add afl custom mutator interface to babynotes" />
     <MESSAGE value="Move custom mutators to mutator crates" />
-    <option name="LAST_COMMIT_MESSAGE" value="Move custom mutators to mutator crates" />
+    <MESSAGE value="Add babyheap-seed-gen and babynotes-seed-gen" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add babyheap-seed-gen and babynotes-seed-gen" />
   </component>
   <component name="WindowStateProjectService">
     <state x="206" y="135" width="1086" height="712" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1606034644508">
@@ -199,14 +209,14 @@
     </state>
     <state width="1458" height="256" key="GridCell.Tab.0.right/0.0.1500.960/767.-1080.1920.1040@0.0.1500.960" timestamp="1606110079077" />
     <state width="1458" height="256" key="GridCell.Tab.0.right/0.0.1500.960@0.0.1500.960" timestamp="1606037731420" />
-    <state x="336" y="174" key="SettingsEditor" timestamp="1606203361146">
+    <state x="336" y="174" key="SettingsEditor" timestamp="1606204580806">
       <screen x="0" y="0" width="1500" height="960" />
     </state>
-    <state x="336" y="174" key="SettingsEditor/0.0.1500.960@0.0.1500.960" timestamp="1606203361146" />
-    <state x="343" y="213" key="Vcs.Push.Dialog.v2" timestamp="1606203778283">
+    <state x="336" y="174" key="SettingsEditor/0.0.1500.960@0.0.1500.960" timestamp="1606204580806" />
+    <state x="343" y="213" key="Vcs.Push.Dialog.v2" timestamp="1606203851474">
       <screen x="0" y="0" width="1500" height="960" />
     </state>
-    <state x="343" y="213" key="Vcs.Push.Dialog.v2/0.0.1500.960@0.0.1500.960" timestamp="1606203778283" />
+    <state x="343" y="213" key="Vcs.Push.Dialog.v2/0.0.1500.960@0.0.1500.960" timestamp="1606203851474" />
     <state x="414" y="207" width="672" height="678" key="search.everywhere.popup" timestamp="1606031119375">
       <screen x="0" y="0" width="1500" height="960" />
     </state>
